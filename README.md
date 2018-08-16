@@ -410,7 +410,8 @@ make setup_with_unit_test
 
 if you need also the project setup. Especially on an build server the last command is very useful.
 
-### Rake
+### Rakefile
+
 The [Wordpress](https://github.com/wordpress-mobile/WordPress-iOS/ "Wordpress") ([Rakefile](https://github.com/wordpress-mobile/WordPress-iOS/blob/develop/Rakefile "Rakefile")) app uses a Rakefile for its project setup. This is similar to the Makefile solution, but it uses the Ruby variant of make: [rake](https://github.com/ruby/rake "rake")
 
 Therefore we don’t need a check for Ruby, because Ruby and `rake` are preconditions on the developers system to execute the Rakefile tasks.
