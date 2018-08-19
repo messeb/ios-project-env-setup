@@ -2,7 +2,7 @@
 
   ![iOS Project setup](files/ios-project-setup.gif)
 
-Nowadays an iOS project is more than only a `*.xcodeproj`  file with some self-written Objective-C or Swift files. We have a lot of direct and indirect external dependencies in our projects and each new developer on the project or the build server have to get these. The developers need these before developing on the app and the build server to build and deploy the app.
+Nowadays an iOS project is more than only a `*.xcodeproj` file with some self-written Objective-C or Swift files. We have a lot of direct and indirect external dependencies in our projects and each new developer on the project or the build server have to get these. Developers need these before working on the app and the build server to build and deploy the app.
 
 --- 
 #### Table of Content
@@ -10,67 +10,67 @@ Nowadays an iOS project is more than only a `*.xcodeproj`  file with some self-w
 * [Solutions for code dependencies](#solutions-for-code-dependencies)
 * [Managing dependency chain](#managing-dependency-chain)
 * [Solutions](#solution)
-	* [Shell script](#shell-script)
-	* [Makefile](#makefile)
-	* [Rakefile](#rakefile)
+    * [Shell script](#shell-script)
+    * [Makefile](#makefile)
+    * [Rakefile](#rakefile)
 * [Conclusion](#conclusion)
 * [Demo project](#demo-project)
 --- 
 
 ## Types of dependencies
 
-We can separate the project dependencies in different categories:
+We can separate the project dependencies into different categories:
 
-**Code**: Because we don’t want reinvent the wheel for some parts in our apps again and again, we use third-party libraries for common use cases. E.g. we use [Alamofire](https://github.com/Alamofire/Alamofire "Alamofire") for our network stack. Also, we want use the latest and hopeful greatest version of each dependency, to get the newest features and especially critical bug fixes almost automatically. To reach this goal you should use a dependency manager, which cares about these problems. The principle „never change a running“ system should not apply to third-party dependencies. Especially if these are responsible for critical parts of the app, like encryption.
+**Code**:  Because we don’t want reinvent the wheel for parts of our apps again and again, we use third-party libraries for common use cases. E.g. we use [Alamofire](https://github.com/Alamofire/Alamofire "Alamofire") for our network stack. Also, we want use the latest and hopefully greatest version of each dependency, to get the newest features and especially critical bug fixes almost automatically. To reach this goal you should use a dependency manager, which cares about these problems. The principle „never change a running“ system should not apply to third-party dependencies. Especially if these are responsible for critical parts of the app, like encryption.
 
 **Code Dependency Manager**:  To manage code dependencies in our project we currently have two famous dependency management systems in our iOS world: [Cocoapods](https://github.com/CocoaPods/CocoaPods "Cocoapods") and [Carthage](https://github.com/Carthage/Carthage "Carthage"). Both have almost the same feature set and care about two important requirements: 
 1. Install the same versions of the dependencies on every system, so that every developer and the build server creates the same app artefact. 
-1. Support to update to dedicated or latest versions of the dependencies
-But neither _Cocoapods_ or  _Carthage_ are coming directly with macOS, therefore we have to install at least one of them. _Cocoapods_ is available as Ruby Gem and the preferred way to install _Carthage_ is via a _Homebrew_ package.
+1. Support updating a to dedicated or latest version of the dependencies
+But neither _Cocoapods_ or _Carthage_ are bundled with macOS, therefore we have to install at least one of them. _Cocoapods_ is available as Ruby Gem and the preferred way to install _Carthage_ is via a _Homebrew_ package.
 
-**Dependency Manager Management**:  To managed our iOS dependency manager, we should use some kind of dependency manager, too. 
-_Cocoapods_ is available as Ruby Gem. So we should create an `Gemfile` for these type of dependencies. (Thats like the `Podfile` for Ruby developers. ) Than we need also the _bundler_ Ruby Gem to manage it. Look at [https://rubygems.org](https://rubygems.org/ "https://rubygems.org") and [https://bundler.io/](https://bundler.io/) for detailed information.
-For _Carthage_ we use _Homebrew_ to install it. _Carthage_ will be installed via a shell command: `brew install carthage`. _Homebrew_ itself is only available via an Ruby installation script. (See [https://brew.sh](https://brew.sh/ "https://brew.sh"))
+**Dependency Manager Management**:  To manage our iOS dependency manager, we should use some kind of dependency manager, too. 
+_Cocoapods_ is available as Ruby Gem. So we should create a `Gemfile` for these type of dependencies (a `Gemfile` is like the `Podfile` for Ruby developers). We then need to use the _bundler_ Ruby Gem to manage the dependencies in the `Gemfile`. Look at [https://rubygems.org](https://rubygems.org/ "https://rubygems.org") and [https://bundler.io/](https://bundler.io/) for detailed information.
+We install _Carthage_ with _Homebrew_ via a shell command: `brew install carthage`. _Homebrew_ itself is only available through a Ruby installation script. (See [https://brew.sh](https://brew.sh/ "https://brew.sh"))
 
-**Ruby**:  The primal dependency in this dependency chain is Ruby. The good news is that it is directly available on the latest macOS in an not so old version. But if you want the latest or a special Ruby version, you have to provide a way to install it. Besides compiling it from source code, you can use _RVM_ or _rbenv_, which also provides an environment management for _Ruby_.
+**Ruby**:  The prime dependency in this dependency chain is Ruby. The good news is that it is directly available in the latest macOS, in a 'not so old' version too! If you want the latest or a special version of Ruby you have to install it another way. Besides compiling it from source code, you can use _RVM_ or _rbenv_, which provides an environment management for _Ruby_.
 
 ## Solutions for code dependencies
 
-After we see what dependencies an iOS project really have, we could face the possible solutions for it:
+After we see what dependencies our iOS project really has, we could look at possible solutions for managing them:
 
 ### Under version control
 
-If you put your code dependencies in your version control system, you will have a compile-ready state of the project in your repository. Than it’s not needed, at least for the build server, to have a way to install all the other indirect dependencies, like _Cocoapods_. But a developer, who wants install new or update old code dependency will need them. 
+If you put your code dependencies in your version control system, you will have a compile-ready state of the project in your repository. Then it’s not needed, at least for the build server, to have a way to install all the other indirect dependencies, like _Cocoapods_. But a developer, who wants install new or update old code dependency, will need them. 
 
 ### Not under version control
 
-If you not put the code dependencies under version control, you have to provide a way that your colleagues and the build server can resolve and fetch them. The most important part is that everyone gets the same versions of each dependency, which is ensured via the `*.lock`  / `*.resolved` files of each dependency manager. These files freezes the versions of used dependencies and you have to force update the dependency versions for newer versions.
-In this solution, it will be also easy to add, update or remove a dependency in each step, because every developer has the needed environment for it.  E.g. _fastlane_ is provided also as Ruby Gem, so you need only modify the `Gemfile` of the project and update the `Gemfile.lock`.
-An negative aspect is, that all of the dependencies have to be always available. Nowadays, most of the code dependency are public hosted on Github.com and will be consumed from there. If a developer decides to remove his library from Github.com, you need to exchange the dependency or try to find another source of it.
+If you not put the code dependencies under version control, you have to provide a way that your colleagues and the build server can resolve and fetch them. The most important part is that everyone gets the same versions of each dependency, which is ensured via the `*.lock`  / `*.resolved` files of each dependency manager. These files freeze the versions of used dependencies and you have to force update the dependency versions for newer versions.
+In this solution, it will be also easy to add, update or remove a dependency in each step, because every developer has the needed environment for it.  E.g. _fastlane_ is also provided as a Ruby Gem, so you only need to modify the `Gemfile` of the project and update the `Gemfile.lock`.
+An negative aspect is, that all of the dependencies have to always be available. Nowadays, most of the code dependency are public hosted on Github.com and will be consumed from there. If a developer decides to remove their library from Github.com you need to change the dependency or try to find another source for it.
 
 
 Regardless which way you choose, in my opinion you should provide an easy way to setup the whole project environment. 
 
 ## Managing dependency chain
 
-Currently there is no single right way to manage the whole dependency chain for an iOS project environment. It depends on the project and what parts  should be provided for the developers and what parts they want manage by their own. Especially for Xcode (Mac App Store or direct download from developer portal) and Ruby (_RVM_ or _rbenv_), each developer has it favourite way to manage it.
+Currently there is no single right way to manage the whole dependency chain for an iOS project environment. It depends on the project and what parts should be provided for the developers and what parts they want manage by their own. Especially for Xcode (Mac App Store or direct download from developer portal) and Ruby (_RVM_ or _rbenv_), each developer has their favourite way to manage it.
 
 
-So, there is a part of the chain, which should already exists on the developers computer or the build server. For the rest, there exists three common ways to install all the project dependencies: Shell script, Makefile, Rake script
+So, there is a part of the chain, which should already exists on the developers computer or the build server. For the rest, there are three common ways to install all the project dependencies: Shell script, Makefile and Rake script.
 
 ### Base setup
 
-The base setup, which should be already on the developers computers, normally contains Xcode, Ruby and Homebrew. It depends whether you use _Cocoapods_  or _Carthage_ if you need _Homebrew_. But we take this as starting point.
+The base setup, which should be already on the developers computers, normally contains Xcode, Ruby and Homebrew. It depends whether you use _Cocoapods_ or _Carthage_ if you need _Homebrew_. But we can use this as starting point.
 
-**Xcode**: You can install the latest release version of Xcode via the Mac App Store ([https://itunes.apple.com/app/xcode/id497799835](https://itunes.apple.com/app/xcode/id497799835)), or via an direct download from the Apple Developer portal ([https://developer.apple.com/download/](https://developer.apple.com/download/)). If you use the Mac App Store version, you can auto update to the latest version, but have in mind that not every project is directly ready to run with the latest Xcode. 
+**Xcode**:  You can install the latest release version of Xcode via the Mac App Store ([https://itunes.apple.com/app/xcode/id497799835](https://itunes.apple.com/app/xcode/id497799835)), or via an direct download from the Apple Developer portal ([https://developer.apple.com/download/](https://developer.apple.com/download/)). If you use the Mac App Store version, you can auto update to the latest version, but keep in mind that not every project is directly ready to run with the latest Xcode. 
 
-**Ruby**: You can download the source code and compile it by your own ([https://www.ruby-lang.org/en/downloads/](https://www.ruby-lang.org/en/downloads/)). Or you use third party tools to manage it, like [rbenv](https://github.com/rbenv/rbenv) or [RVM](http://rvm.io/). With the third party tools you can easily update or switch the current used Ruby version. So, you should really have a look at it.
+**Ruby**:  You can download the source code and compile it by your own ([https://www.ruby-lang.org/en/downloads/](https://www.ruby-lang.org/en/downloads/)). Or you use third party tools to manage it, like [rbenv](https://github.com/rbenv/rbenv) or [RVM](http://rvm.io/). With the third party tools you can easily update or switch the current used Ruby version. So, you should really have a look at it.
 
-**Homebrew**:  For installation of _Homebrew_  a script is provided on the project website [brew.sh](https://brew.sh/). If you have install it, _Homebrew_ can be upgraded by their own: `brew update`
+**Homebrew**:  To install _Homebrew_ a script is provided on the project website [brew.sh](https://brew.sh/). If you have installed it already, _Homebrew_ can be self upgraded with the command: `brew update`
 
 ### Dependency setup
 
-**Ruby dependencies**:  External dependencies for Ruby scripts are normally be managed via the packet manager system `RubyGems`. With the Gem _bundler_ its possible to install Gems from a _Gemfile_ like this:
+**Ruby dependencies**:  External dependencies for Ruby scripts are normally be managed via the packet manager system `RubyGems`. With the Gem _bundler_ it's possible to install Gems from a _Gemfile_ like this:
 
 ```ruby
 ruby "~> 2.5.1"
@@ -80,11 +80,11 @@ gem 'cocoapods', '~> 1.5.3'
 gem 'fastlane', '~> 2.100.1'
 ```
 
-To install these dependencies, you only have to run `bundle install`. The first run of it produces also a `Gemfile.lock` file, which locks the version numbers for other clients. So its guaranteed that on every system the same artefact is produced. Therefore the `Gemfile.lock` should be committed in the project Git repository.
+To install these dependencies, you only have to run `bundle install`. The first run of it produces also a `Gemfile.lock` file, which locks the version numbers for other clients. So it's guaranteed that the same artefact is produced on every system. Therefore the `Gemfile.lock` should be committed in the project Git repository.
 
-**Cocoapods dependencies**: Cocoapods manages the dependencies in their  _Podfile_ and _Podfile.lock_. With a call of `pod install` you install all of the dependencies in the right version. With `pod update` you can update the _Podfile.lock_ after changes in  _Podfile_. Also the _Podfile.lock_ needs to be in you project Git repository.
+**Cocoapods dependencies**:  Cocoapods manages the dependencies in their  _Podfile_ and _Podfile.lock_ files. With a call of `pod install` you install all the right versions of the dependencies. With `pod update` you can update the _Podfile.lock_ after changes in _Podfile_. The _Podfile.lock_ also needs to be in you project Git repository.
 
-**Carthage dependencies**: Like _Cocoapods_, _Carthage_ has its _Cartfile_ and _Cartfile.resolved_ with the specified versions of the dependencies. With `carthage bootstrap` you can build the frameworks. The _Cartfile.resolved_ should also be in your Git repository. 
+**Carthage dependencies**:  Like _Cocoapods_, _Carthage_ has it's _Cartfile_ and _Cartfile.resolved_ with the specified versions of the dependencies. Using `carthage bootstrap` you can build the frameworks. The _Cartfile.resolved_ should also be in your Git repository. 
 
 
 To install all the dependency a developer has to run the following commands:
@@ -126,23 +126,21 @@ So the best way would be a solution where these steps are running with the other
 ### Shell script
 The shell script solution is inspired by the [Firefox iOS App](https://github.com/mozilla-mobile/firefox-ios/) and their solution can be found here: [bootstrap.sh](https://github.com/mozilla-mobile/firefox-ios/blob/master/bootstrap.sh)
 
-The script will be executed from top to bottom and executes all the necessary steps for setup the project environment. 
+The script will be executed from top to bottom and performs all the necessary steps to setup the project environment. 
 
 **Pros**:
-* same syntax as manual entered commands
-* groups manual entered commands in one file
-* can contain checks for dependencies
-* customisable and extensible with functions
+* Same syntax as manual entered commands
+* Groups manual entered commands into one file
+* Can contain checks for dependencies
+* Customisable and extendible with functions
 
 **Cons**:
 * Bash syntax
-* no selective running of steps
-* no easy integration of optional additional steps
+* No selective running of steps
+* No easy integration of optional additional steps
 
 
-I add the  `command_exists` function, to check if a executable is available in the current shell path.
-
-The script will be executed from top to bottom and executes all the necessary steps.  It should be self explanatory:
+I added the `command_exists` function, to check if a executable is available in the current shell path.
 
 ```bash
 #!/bin/bash
@@ -216,7 +214,7 @@ echo "iOS project setup ..."
 only_test=false
 [ "$1" == "only_test" ] && only_test=true
 
-# Check if user wants to create build envirnoment
+# Check if user wants to create build environment
 # and execute the unit tests
 with_test=false
 [ "$1" == "with_test" ] && with_test=true
@@ -262,13 +260,13 @@ For `only_test`, the function `unit_test` will be executed at the beginning and 
 
 Inspired by the [Kickstarter](https://github.com/kickstarter/ios-oss "Kickstarter") ([Makefile](https://github.com/kickstarter/ios-oss/blob/master/Makefile "Makefile")) and [Wikipedia](https://github.com/wikimedia/wikipedia-ios "Wikipedia") ([Makefile](https://github.com/wikimedia/wikipedia-ios/blob/develop/Makefile "Makefile")) app, a Makefile can also be a solution to execute all the steps with one command.
 
-Except from the shell script solution, it not executes all the steps from top to bottom, it’s execute a block, named `target`, by its name like:
+Unlike the shell script solution, it does not execute all the steps from top to bottom,. It executes a `target` block using it's name like:
 
 ```bash
 make target_name
 ```
 
-Only the commands in this `target` will be executed. But you can define other `targets` which should be executed before. So you have a chain of commands which will be executed one after the other.  You will see it in the example.
+Only the commands in this `target` will be executed. But you can define other `targets` which should be executed before. So you have a chain of commands which will be executed one after the other which you can see it in the example.
 
 You can also define a default `target` which will be executed if no `target` name is given.
 
@@ -284,10 +282,10 @@ You can also define a default `target` which will be executed if no `target` nam
 * Limited customisable and extensible with targets
 
 
-A Makefile can look like the example below and contains for each of our project setup steps a target.
-The `setup` target  has only other targets as dependencies and doesn’t execute something. Targets after a colon of the target name will be executed before the target and in the defined order. So you can manage the execution order of your steps. 
+A Makefile can look like the example below and contain setup steps for each project as target.
+The `setup` target only has other targets as dependencies and doesn’t execute anything. Targets with a colon after the target name will be executed in top to bottom order. So you can manage the execution order of your steps. 
 
-The syntax of a Makefile is a little complicated, like the checks of the existing Ruby or Homebrew binaries shows, but normally you don’t need more. If you interested in more, read in the [make documentation](https://www.gnu.org/software/make/manual/make.html "make documentation").
+The syntax of a Makefile is a little complicated, like the checks of the existing Ruby or Homebrew binaries shows, but normally you don’t need to know more. If you interested, read more in the [make documentation](https://www.gnu.org/software/make/manual/make.html "make documentation").
 
 ```bash
 # Checks if executable exists in current path
@@ -300,90 +298,90 @@ default: setup
 
 # Steps for project environment setup
 setup: \
-	pre_setup \
-	check_for_ruby \
-	check_for_homebrew \
-	update_homebrew \
-	install_carthage \
-	install_bundler_gem \
-	install_ruby_gems \
-	install_carthage_dependencies \
-	install_cocoapods
+    pre_setup \
+    check_for_ruby \
+    check_for_homebrew \
+    update_homebrew \
+    install_carthage \
+    install_bundler_gem \
+    install_ruby_gems \
+    install_carthage_dependencies \
+    install_cocoapods
 
 # Pre-setup steps
 pre_setup:
-	$(info iOS project setup ...)
+    $(info iOS project setup ...)
 
 # Check if Ruby is installed
 check_for_ruby:
-	$(info Checking for Ruby ...)
+    $(info Checking for Ruby ...)
 
 ifeq ($(RUBY),)
-	$(error Ruby is not installed)
+    $(error Ruby is not installed)
 endif
 
 # Check if Homebrew is available
 check_for_homebrew:
-	$(info Checking for Homebrew ...)
+    $(info Checking for Homebrew ...)
 
 ifeq ($(HOMEBREW),)
-	$(error Homebrew is not installed)
+    $(error Homebrew is not installed)
 endif
 
 # Update Homebrew
 update_homebrew:
-	$(info Update Homebrew ...)
+    $(info Update Homebrew ...)
 
-	brew update
+    brew update
 
 # Install Bundler Gem
 install_bundler_gem:
-	$(info Checking and install bundler ...)
+    $(info Checking and install bundler ...)
 
 ifeq ($(BUNDLER),)
-	gem install bundler -v '~> 1.16'
+    gem install bundler -v '~> 1.16'
 else
-	gem update bundler '~> 1.16'
+    gem update bundler '~> 1.16'
 endif
 
 # Install Ruby Gems
 install_ruby_gems:
-	$(info Install RubyGems ...)
+    $(info Install RubyGems ...)
 
-	bundle install
+    bundle install
 
 # Install Cocopods dependencies
 install_cocoapods:
-	$(info Install Cocoapods ...)
+    $(info Install Cocoapods ...)
 
-	pod install
+    pod install
 
 # Install Carthage
 install_carthage:
-	$(info Install Carthage ...)
+    $(info Install Carthage ...)
 
-	brew unlink carthage || true
-	brew install carthage
-	brew link --overwrite carthage
+    brew unlink carthage || true
+    brew install carthage
+    brew link --overwrite carthage
 
 # Install Carthage dependencies
 install_carthage_dependencies:
-	$(info Install Carthage Dependencies ...)
+    $(info Install Carthage Dependencies ...)
 
-	carthage bootstrap --platform ios --cache-builds
+    carthage bootstrap --platform ios --cache-builds
 
 ```
 
-Each of the targets can also be execute by their own. You have to execute `make` only with the specific target name, like `make install_ruby_gems`
+Each of the targets can also be execute on their own. You have to execute `make` with the specific target name, like `make install_ruby_gems`
 
-So, its also easy to add additional steps in our project setup. If you want to add the execution of the unit test in it, you define only an additional target (`unit_test`) for it.
-If you want to execute the `setup` and the `unit_test` target together, you will define only an additional target with these targets as dependency.
+So, it's also easy to add additional steps in our project setup. If you want to add a unit test to it, you can define an additional target (`unit_test`).
+If you want to execute the `setup` and the `unit_test` target together, you can define an additional target with these targets as dependency.
 
 ```bash
 # Combines project setup with unit tests
 setup_with_unit_test: \
-	setup \
-	unit_test
+    setup \
+    unit_test
 
 #
 # All other boostrapping steps
@@ -391,9 +389,9 @@ setup_with_unit_test: \
 
 # Run fastlane unit tests
 unit_test:
-	$(info Run Unittests ...)
+    $(info Run Unittests ...)
 
-	fastlane test
+    fastlane test
 ```
 
 So you can call 
@@ -414,10 +412,10 @@ if you need also the project setup. Especially on an build server the last comma
 
 The [Wordpress](https://github.com/wordpress-mobile/WordPress-iOS/ "Wordpress") ([Rakefile](https://github.com/wordpress-mobile/WordPress-iOS/blob/develop/Rakefile "Rakefile")) app uses a Rakefile for its project setup. This is similar to the Makefile solution, but it uses the Ruby variant of make: [rake](https://github.com/ruby/rake "rake")
 
-Therefore we don’t need a check for Ruby, because Ruby and `rake` are preconditions on the developers system to execute the Rakefile tasks.
+We don’t need a check for Ruby because Ruby and `rake` are preconditions on the developers system to execute the Rakefile tasks.
 
-Otherwise the Rakefile solution is very similar to their Makefile complement.
-Each project setup step is in a `task` block and can be execute by its name, e.g.   `rake check_homebrew`.
+Otherwise, the Rakefile solution is very similar to a Makefile.
+Each project setup step is in a `task` block and can be execute by its name, e.g. `rake check_homebrew`.
 It is also possible to have a default `task`, which will be execute if you only call `rake`, and each of the tasks can depend on others.
 
 **Pros**:
@@ -432,15 +430,15 @@ It is also possible to have a default `task`, which will be execute if you only 
 * Rakefile syntax
 * Executes shell commands over an additional Ruby function `sh`
 
-You can see an example below. The main task is `setup`, which only has other tasks as dependencies.  You can define dependencies with an arrow operator and the list of the dependencies.
+You can see an example below. The main task is `setup`, which has other tasks as dependencies. You can define dependencies with an arrow operator pointing to the list of the dependencies.
 
-Each of the task can contain any Ruby code. So, if you are familiar with Ruby, you can adapt this solution very fast. But you see also, that you will mostly only execute shell commands from your Ruby script. That’s why you should look, if you really need this additional abstraction layer.
+Each of the tasks can contain any Ruby code. So if you are familiar with Ruby you can adapt this solution very quickly. But you can also see that you will mostly execute shell commands from your Ruby script. That’s why you should decide for yourself if you really need this additional abstraction layer.
 
 
 ```ruby
 # Checks if executable exists in current path
 def command?(command)
-	system("command -v #{command} > /dev/null 2>&1")
+    system("command -v #{command} > /dev/null 2>&1")
 end
 
 # Default target, if no is provided
@@ -448,66 +446,66 @@ task default: [:setup]
 
 # Steps for project environment setup
 task :setup => [
-	:pre_setup,
-	:check_for_homebrew, 
-	:update_homebrew,
-	:install_bundler_gem,
-	:install_ruby_gems,
-	:install_carthage,
-	:install_cocoapods_dependencies,
-	:install_carthage_dependencies,
+    :pre_setup,
+    :check_for_homebrew, 
+    :update_homebrew,
+    :install_bundler_gem,
+    :install_ruby_gems,
+    :install_carthage,
+    :install_cocoapods_dependencies,
+    :install_carthage_dependencies,
 ]
 
 # Pre-setup steps
 task :pre_setup do 
-	puts "iOS project setup ..."
+    puts "iOS project setup ..."
 end
 
 # Check if Homebrew is available
 task :check_for_homebrew do
-	puts "Checking Homebrew ..."
-	if not command?('brew')
-		STDERR.puts "Homebrew not found, please install it:"
-		STDERR.puts "https://brew.sh/"
-		exit
-	end
+    puts "Checking Homebrew ..."
+    if not command?('brew')
+        STDERR.puts "Homebrew not found, please install it:"
+        STDERR.puts "https://brew.sh/"
+        exit
+    end
 end
 
 # Update Homebrew
 task :update_homebrew do 
-	puts "Updating Homebrew ..."
-	sh "brew update"
+    puts "Updating Homebrew ..."
+    sh "brew update"
 end
 
 # Install Bundler Gem
 task :install_bundler_gem do 
-	if not command?('bundle')
-		sh "gem install bundler -v '~> 1.16'"
-	else
-		sh "gem update bundler '~> 1.16'"
-	end
+    if not command?('bundle')
+        sh "gem install bundler -v '~> 1.16'"
+    else
+        sh "gem update bundler '~> 1.16'"
+    end
 end
 
 # Install Ruby Gems
 task :install_ruby_gems do
-	sh "bundle install"
+    sh "bundle install"
 end
 
 # Install Cocopods dependencies
 task :install_cocoapods_dependencies do
-	sh "pod install"
+    sh "pod install"
 end
 
 # Install Carthage
 task :install_carthage do 
-	sh "brew unlink carthage || true"
-	sh "brew install carthage"
-	sh "brew link --overwrite carthage"
+    sh "brew unlink carthage || true"
+    sh "brew install carthage"
+    sh "brew link --overwrite carthage"
 end
 
 # Install Carthage dependencies
 task :install_carthage_dependencies do
-	sh "carthage bootstrap --platform ios --cache-builds"
+    sh "carthage bootstrap --platform ios --cache-builds"
 end
 ```
 
@@ -516,17 +514,17 @@ To add additional steps, you only have to add another task, like one for the uni
 ```ruby
 # Run fastlane unit tests
 task :unit_test do 
-	sh "fastlane test"
+    sh "fastlane test"
 end
 ```
 
-You can call it directly with `rake unit_test`. To combine the project setup with the execution of the unit tests, you can define an extra task for it, which has the both tasks as dependencies.
+You can call this directly with `rake unit_test`. To combine the project setup with the execution of the unit tests, you can define an extra task for it, which has the both tasks as dependencies.
 
 ```ruby
 # Combines project setup with unit tests
 task :setup_with_unit_test => [
-	:setup,
-	:unit_test
+    :setup,
+    :unit_test
 ]
 ```
 
@@ -538,16 +536,16 @@ rake setup_with_unit_test
 
 ## Conclusion
 
-Anyway, if you use a shell script, a Makefile, a Rakefile or something else, you should provide an easy bootstrapping script for your iOS project. This makes it for new developers much easier to start and than also a build server needs only a one liner to build and deploy the app. The trouble with setting this up and learning some new script languages will it be worth.
+If you use a shell script, a Makefile, a Rakefile or something else, you will provide an easy bootstrapping script for your iOS project. This makes it much easier for new developers to start and a build server needs only a one liner to build and deploy the app. The trouble with setting this up and learning some new script languages will it be worth it.
 
-Now, you can also easily use cloud continuous integration services like Travis CI, CircleCI or bitrise.io. Normally in the configuration of these services you will select an Xcode version and have also Ruby and Homebrew available. So your execution step will be the same, that every developer does on their local machine: `make setup_with_unit_test`.
+Now, you can also easily use cloud continuous integration services like Travis CI, CircleCI or bitrise.io. Normally in the configuration of these services you will select an Xcode version and have also Ruby and Homebrew available. So your execution step will be the same as every developer does on their local machine: `make setup_with_unit_test`.
 
-My preferred solution would be a Makefile, because it has a integrated dependency management between the targets and is direct callable, which is not so easy available in a shell script solution. It sits also on `make`, which comes with every macOS in contrast to `rake`.
-If you need to execute more complex steps, which is not the strength of a Makefile, your can break the steps into multiple Shell or Ruby scripts and call them from your Makefile.
+My preferred solution is a Makefile, because it has a integrated dependency management between the targets and is directly callable, which is not as easy in a shell script solution. It also relies on `make`, which comes with every macOS in contrast to `rake`.
+If you need to execute more complex steps, which is not a strength of a Makefile, your can break the steps into multiple Shell or Ruby scripts and call them from your Makefile.
 
 ## Demo project
 
-I provide a demo project, where you can test all three solutions by your own.
+I have provided a demo project, where you can test all three solutions on your own.
 
 **Shell script**
 
@@ -612,4 +610,4 @@ rake unit_test
 ```
 
 
-The iOS project contains both, Cocoapods and Carthage dependencies, to show the different steps. Normally you would only use one of these code dependency manager. Also a fastlane `test` lane is provided, to execute example unit tests.
+The iOS project contains both, Cocoapods and Carthage dependencies to show the different steps. Normally you would only use one of these code dependency manager. A fastlane `test` lane is also provided to execute example unit tests.
