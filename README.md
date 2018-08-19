@@ -9,7 +9,7 @@ Nowadays an iOS project is more than only a `*.xcodeproj` file with some self-wr
 * [Types of dependencies](#types-of-dependencies)
 * [Solutions for code dependencies](#solutions-for-code-dependencies)
 * [Managing dependency chain](#managing-dependency-chain)
-* [Solutions](#solution)
+* [Solutions](#solutions)
     * [Shell script](#shell-script)
     * [Makefile](#makefile)
     * [Rakefile](#rakefile)
@@ -26,6 +26,7 @@ We can separate the project dependencies into different categories:
 **Code Dependency Manager**:  To manage code dependencies in our project we currently have two famous dependency management systems in our iOS world: [Cocoapods](https://github.com/CocoaPods/CocoaPods "Cocoapods") and [Carthage](https://github.com/Carthage/Carthage "Carthage"). Both have almost the same feature set and care about two important requirements: 
 1. Install the same versions of the dependencies on every system, so that every developer and the build server creates the same app artefact. 
 1. Support updating a to dedicated or latest version of the dependencies
+
 But neither _Cocoapods_ or _Carthage_ are bundled with macOS, therefore we have to install at least one of them. _Cocoapods_ is available as Ruby Gem and the preferred way to install _Carthage_ is via a _Homebrew_ package.
 
 **Dependency Manager Management**:  To manage our iOS dependency manager, we should use some kind of dependency manager, too. 
