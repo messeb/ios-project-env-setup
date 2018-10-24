@@ -4,6 +4,14 @@
 
 Nowadays an iOS project is more than only a `*.xcodeproj` file with some self-written Objective-C or Swift files. We have a lot of direct and indirect external dependencies in our projects and each new developer on the project or the build server have to get these. Developers need these before working on the app and the build server to build and deploy the app.
 
+#### Contact
+
+<a href="https://to.messeb.com/twitter"><img src="http://github.messeb.com.s3.amazonaws.com/assets/messeb-twitter-btn.png" width="120" height="34" style="max-width:100%;"></a> <br>
+Follow me on Twitter: [@_messeb](https://to.messeb.com/twitter) 
+
+<a href="https://to.messeb.com/contact"><img src="http://github.messeb.com.s3.amazonaws.com/assets/messeb-linkedin-btn.png" width="120" height="34" style="max-width:100%;"></a> <br>
+Contact me on LinkedIn: [@messingfeld](https://to.messeb.com/contact)
+
 --- 
 #### Table of Content
 * [Types of dependencies](#types-of-dependencies)
