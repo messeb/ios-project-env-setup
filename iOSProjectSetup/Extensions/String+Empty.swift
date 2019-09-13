@@ -1,5 +1,5 @@
 import Foundation
 
-extension String {
+extension Strmpting {
     static var empty: String { return "" }
 }

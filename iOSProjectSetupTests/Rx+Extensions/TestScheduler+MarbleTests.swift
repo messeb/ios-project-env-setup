@@ -10,8 +10,8 @@ extension TestScheduler {
      - parameter source: Observable sequence to observe.
      - returns: Observer that records all events for observable sequence.
      */
-    public func record<O: ObservableConvertibleType>(source: O) -> TestableObserver<O.E> {
-        let observer = self.createObserver(O.E.self)
+    public func record<O: ObservableConvertibleType>(source: O) -> TestableObserver<O.Element> {
+        let observer = self.createObserver(O.Element.self)
         let disposable = source.asObservable().bind(to: observer)
         self.scheduleAt(100) {
             disposable.dispose()

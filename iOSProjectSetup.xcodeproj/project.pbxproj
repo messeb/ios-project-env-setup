@@ -3,14 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		722C1E6882286DCAC57CC7FC /* Pods_iOSProjectSetup.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0966C7749378DFA0F38BC07 /* Pods_iOSProjectSetup.framework */; };
 		E0154A5E2121CE5E00B127F9 /* TestScheduler+MarbleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0154A5B2121CE5E00B127F9 /* TestScheduler+MarbleTests.swift */; };
 		E0154A5F2121CE5E00B127F9 /* Event+MarbleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0154A5C2121CE5E00B127F9 /* Event+MarbleTests.swift */; };
-		E0154A602121CE5E00B127F9 /* RecordedEvent+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0154A5D2121CE5E00B127F9 /* RecordedEvent+Equatable.swift */; };
 		E0154A622121D1FC00B127F9 /* String+Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0154A612121D1FC00B127F9 /* String+Empty.swift */; };
 		E0154A642121D6F800B127F9 /* Name+Fake.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0154A632121D6F800B127F9 /* Name+Fake.swift */; };
 		E0154A662121D82100B127F9 /* Picture+Fake.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0154A652121D82100B127F9 /* Picture+Fake.swift */; };
@@ -52,7 +51,6 @@
 		CC8C74BBB8DFBD843D92C95A /* Pods-iOSProjectSetupTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSProjectSetupTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOSProjectSetupTests/Pods-iOSProjectSetupTests.release.xcconfig"; sourceTree = "<group>"; };
 		E0154A5B2121CE5E00B127F9 /* TestScheduler+MarbleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TestScheduler+MarbleTests.swift"; sourceTree = "<group>"; };
 		E0154A5C2121CE5E00B127F9 /* Event+MarbleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+MarbleTests.swift"; sourceTree = "<group>"; };
-		E0154A5D2121CE5E00B127F9 /* RecordedEvent+Equatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RecordedEvent+Equatable.swift"; sourceTree = "<group>"; };
 		E0154A612121D1FC00B127F9 /* String+Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Empty.swift"; sourceTree = "<group>"; };
 		E0154A632121D6F800B127F9 /* Name+Fake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Name+Fake.swift"; sourceTree = "<group>"; };
 		E0154A652121D82100B127F9 /* Picture+Fake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picture+Fake.swift"; sourceTree = "<group>"; };
@@ -130,7 +128,6 @@
 			isa = PBXGroup;
 			children = (
 				E0154A5C2121CE5E00B127F9 /* Event+MarbleTests.swift */,
-				E0154A5D2121CE5E00B127F9 /* RecordedEvent+Equatable.swift */,
 				E0154A5B2121CE5E00B127F9 /* TestScheduler+MarbleTests.swift */,
 			);
 			path = "Rx+Extensions";
@@ -326,9 +323,11 @@
 				TargetAttributes = {
 					E0B99CA6211EBB33006C3152 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1100;
 					};
 					E0B99CF62121BA34006C3152 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1100;
 						TestTargetID = E0B99CA6211EBB33006C3152;
 					};
 				};
@@ -447,21 +446,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-iOSProjectSetup/Pods-iOSProjectSetup-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iOSProjectSetup/Pods-iOSProjectSetup-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iOSProjectSetup/Pods-iOSProjectSetup-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iOSProjectSetup/Pods-iOSProjectSetup-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iOSProjectSetup/Pods-iOSProjectSetup-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FFD62FB4E8D3B3AF40ABFE59 /* [CP] Embed Pods Frameworks */ = {
@@ -469,23 +463,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-iOSProjectSetupTests/Pods-iOSProjectSetupTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/RxBlocking/RxBlocking.framework",
-				"${BUILT_PRODUCTS_DIR}/RxTest/RxTest.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iOSProjectSetupTests/Pods-iOSProjectSetupTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iOSProjectSetupTests/Pods-iOSProjectSetupTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iOSProjectSetupTests/Pods-iOSProjectSetupTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iOSProjectSetupTests/Pods-iOSProjectSetupTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -518,7 +505,6 @@
 				E0154A662121D82100B127F9 /* Picture+Fake.swift in Sources */,
 				E0154A5F2121CE5E00B127F9 /* Event+MarbleTests.swift in Sources */,
 				E0B99D082121C215006C3152 /* UserRepositoryFake.swift in Sources */,
-				E0154A602121CE5E00B127F9 /* RecordedEvent+Equatable.swift in Sources */,
 				E0154A642121D6F800B127F9 /* Name+Fake.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -665,7 +651,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.iOSProjectSetup;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -687,7 +673,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.iOSProjectSetup;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -710,7 +696,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.iOSProjectSetupTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOSProjectSetup.app/iOSProjectSetup";
 			};
@@ -734,7 +720,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.iOSProjectSetupTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOSProjectSetup.app/iOSProjectSetup";
 			};
